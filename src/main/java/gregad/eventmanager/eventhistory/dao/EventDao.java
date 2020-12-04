@@ -14,9 +14,9 @@ import java.util.Optional;
 @Repository
 public interface EventDao extends MongoRepository<EventEntity,Long> {
     
-    Optional<EventEntity> findByIdAndOwnerId(long id,String ownerId);
+    Optional<EventEntity> findByIdAndOwnerId(long id,int ownerId);
 
-    Optional<List<EventEntity>> findAllByOwnerIdAndTitleContaining(String ownerId, String title);
+    Optional<List<EventEntity>> findAllByOwnerIdAndTitleContaining(int ownerId, String title);
 
-    Optional<List<EventEntity>> findAllByOwnerId(String ownerId);
+    Optional<List<EventEntity>> findAllByOwnerId(int ownerId);
 }

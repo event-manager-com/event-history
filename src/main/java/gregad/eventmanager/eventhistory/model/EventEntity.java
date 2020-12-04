@@ -1,6 +1,7 @@
 package gregad.eventmanager.eventhistory.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import gregad.eventmanager.eventhistory.dto.UserOwnerDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,8 @@ public class EventEntity {
     private LocalDate eventDate;
     @JsonFormat(pattern = "KK:mm a")
     private LocalTime eventTime;
+    private String imageUrl;
+    private String telegramChannelRef;
     private Map<String,List<User>>sentToNetworkConnections;
     private Map<String, List<User>> invited;
     private Map<String, List<Message>> correspondences;

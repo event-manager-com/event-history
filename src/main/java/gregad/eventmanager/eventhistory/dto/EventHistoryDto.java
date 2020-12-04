@@ -29,6 +29,8 @@ public class EventHistoryDto {
     private LocalDate eventDate;
     @JsonFormat(pattern = "KK:mm a")
     private LocalTime eventTime;
+    private String imageUrl;
+    private String telegramChannelRef;
     private Map<String,List<User>>sentToNetworkConnections;
     private Map<String, List<User>> invited;
     private Map<String, List<Message>> correspondences;

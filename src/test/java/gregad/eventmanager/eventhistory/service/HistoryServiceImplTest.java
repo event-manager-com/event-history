@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 /**
@@ -64,7 +63,7 @@ class HistoryServiceImplTest {
     private static List<User> generateUsers(int amount) {
         List<User>res=new ArrayList<>();
         for (int i = 0; i < amount; i++) {
-            res.add(new User(""+i,"name"+i));
+            res.add(new User(i,"name"+i));
         }
         return res;
     }
@@ -87,21 +86,21 @@ class HistoryServiceImplTest {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Test
     void getEventById() {
-        when(eventRepo.findByIdAndOwnerId(0,"0")).
+        when(eventRepo.findByIdAndOwnerId(0,0)).
                 thenReturn(java.util.Optional.ofNullable(eventEntityList.get(0)));
 
-        EventHistoryDto result = historyService.getEventById(0, "0");
+        EventHistoryDto result = historyService.getEventById(0, 0);
         Assert.assertEquals(0,result.getId());
-        Assert.assertEquals("0",result.getOwner().getId());
+        Assert.assertEquals(0,result.getOwner().getId());
         Assert.assertEquals("name0",result.getOwner().getName());
 
         try {
-            historyService.getEventById(0,"2");
+            historyService.getEventById(0,2);
         } catch (ResponseStatusException e) {
             Assert.assertEquals("Event id:0 not found in user id:2 storage",e.getReason());
         }
         try {
-            historyService.getEventById(2,"0");
+            historyService.getEventById(2,0);
         } catch (ResponseStatusException e) {
             Assert.assertEquals("Event id:2 not found in user id:0 storage",e.getReason());
         }
@@ -109,43 +108,43 @@ class HistoryServiceImplTest {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Test
     void getEventByTitle() {
-        when(eventRepo.findAllByOwnerIdAndTitleContaining("0","Event0")).
+        when(eventRepo.findAllByOwnerIdAndTitleContaining(0,"Event0")).
                 thenReturn(Optional.of(List.of(eventEntityList.get(0),eventEntityList.get(20))));
 
-        List<EventHistoryDto> result = historyService.getEventByTitle("0", "Event0");
+        List<EventHistoryDto> result = historyService.getEventByTitle(0, "Event0");
         Assert.assertEquals(2,result.size());
         Assert.assertEquals("name0",result.get(0).getOwner().getName());
-        Assert.assertEquals("0",result.get(0).getOwner().getId());
+        Assert.assertEquals(0,result.get(0).getOwner().getId());
         
-        Assert.assertEquals(0,historyService.getEventByTitle("1","Event0").size());
+        Assert.assertEquals(0,historyService.getEventByTitle(1,"Event0").size());
 
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Test
     void getEventsByDate() {
-        when(eventRepo.findAllByOwnerId("0")).thenReturn(Optional.of(List.of(eventEntityList.get(0),eventEntityList.get(20))));
+        when(eventRepo.findAllByOwnerId(0)).thenReturn(Optional.of(List.of(eventEntityList.get(0),eventEntityList.get(20))));
 
-        List<EventHistoryDto> result = historyService.getEventsByDate("0", 
+        List<EventHistoryDto> result = historyService.getEventsByDate(0, 
                 LocalDate.of(2020, 11, 2), LocalDate.of(2020, 12, 12));
         Assert.assertEquals(1,result.size());
         Assert.assertTrue(result.get(0).getEventDate().isAfter( LocalDate.of(2020, 11, 2)));
         Assert.assertTrue(result.get(0).getEventDate().isEqual( LocalDate.of(2020, 12, 12)));
 
-        List<EventHistoryDto> anotherResult = historyService.getEventsByDate("0",
+        List<EventHistoryDto> anotherResult = historyService.getEventsByDate(0,
                 LocalDate.of(2020, 11, 2), LocalDate.of(2020, 12, 13));
         Assert.assertTrue(anotherResult.get(0).getEventDate().isBefore( LocalDate.of(2020, 12, 13)));
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Test
     void getEventsBySentNetworks() {
-        when(eventRepo.findAllByOwnerId("0")).thenReturn(Optional.of(List.of(eventEntityList.get(0),eventEntityList.get(20))));
+        when(eventRepo.findAllByOwnerId(0)).thenReturn(Optional.of(List.of(eventEntityList.get(0),eventEntityList.get(20))));
 
-        List<EventHistoryDto> result = historyService.getEventsBySentNetworks("0", List.of("twitter"));
+        List<EventHistoryDto> result = historyService.getEventsBySentNetworks(0, List.of("twitter"));
         
         Assert.assertEquals(1,result.size());
         Assert.assertTrue(result.get(0).getSentToNetworkConnections().containsKey("twitter"));
 
-        List<EventHistoryDto> anotherResult = historyService.getEventsBySentNetworks("0", List.of("facebook"));
+        List<EventHistoryDto> anotherResult = historyService.getEventsBySentNetworks(0, List.of("facebook"));
         Assert.assertEquals(2,anotherResult.size());
     }
 }

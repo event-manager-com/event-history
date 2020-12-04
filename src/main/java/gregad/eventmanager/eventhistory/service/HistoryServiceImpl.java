@@ -35,7 +35,7 @@ public class HistoryServiceImpl implements HistoryService {
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
-    public EventHistoryDto getEventById(long id,String ownerId) {
+    public EventHistoryDto getEventById(long id,int ownerId) {
         EventEntity eventEntity = eventRepo.findByIdAndOwnerId(id,ownerId).orElseThrow(()->{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Event id:"+id+" not found in user id:"+ownerId+" storage");
@@ -57,13 +57,13 @@ public class HistoryServiceImpl implements HistoryService {
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
-    public List<EventHistoryDto> getEventByTitle(String ownerId, String title) {
+    public List<EventHistoryDto> getEventByTitle(int ownerId, String title) {
         List<EventEntity>events=eventRepo.findAllByOwnerIdAndTitleContaining(ownerId,title).orElse(new ArrayList<>());
         return events.stream().map(this::toEventResponseDto).collect(Collectors.toList());
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
-    public List<EventHistoryDto> getEventsByDate(String ownerId, LocalDate from, LocalDate to) {
+    public List<EventHistoryDto> getEventsByDate(int ownerId, LocalDate from, LocalDate to) {
         return eventRepo.findAllByOwnerId(ownerId)
                 .orElse(new ArrayList<>())
                 .stream()
@@ -74,7 +74,7 @@ public class HistoryServiceImpl implements HistoryService {
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
-    public List<EventHistoryDto> getEventsBySentNetworks(String ownerId, List<String> networks) {
+    public List<EventHistoryDto> getEventsBySentNetworks(int ownerId, List<String> networks) {
         return eventRepo.findAllByOwnerId(ownerId).orElse(new ArrayList<>()).stream()
                 .filter(e-> e.getSentToNetworkConnections().keySet().stream().anyMatch(networks::contains))
                 .collect(Collectors.toSet())

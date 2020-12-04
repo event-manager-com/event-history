@@ -11,9 +11,9 @@ import java.util.List;
  */
 public interface HistoryService {
     boolean addAllEvent(List<EventEntity> events);
-    EventHistoryDto getEventById(long eventId,String ownerId);
-    List<EventHistoryDto> getEventByTitle(String ownerId, String title);
-    List<EventHistoryDto> getEventsByDate(String ownerId, LocalDate from, LocalDate to);
-    List<EventHistoryDto> getEventsBySentNetworks(String ownerId, List<String> networks);
+    EventHistoryDto getEventById(long eventId,int ownerId);
+    List<EventHistoryDto> getEventByTitle(int ownerId, String title);
+    List<EventHistoryDto> getEventsByDate(int ownerId, LocalDate from, LocalDate to);
+    List<EventHistoryDto> getEventsBySentNetworks(int ownerId, List<String> networks);
 
 }
