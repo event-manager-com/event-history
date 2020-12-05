@@ -26,24 +26,24 @@ public class HistoryEventController {
     }
     
     @GetMapping(value = SEARCH)
-    public EventHistoryDto getEventById(@RequestParam long eventId,@RequestParam String ownerId){
+    public EventHistoryDto getEventById(@RequestParam long eventId,@RequestParam int ownerId){
         return historyService.getEventById(eventId,ownerId);
     }
     
     @GetMapping(value = SEARCH+BY_TITLE)
-    public List<EventHistoryDto> getEventsByTitle(@RequestParam String ownerId,@RequestParam String title){
+    public List<EventHistoryDto> getEventsByTitle(@RequestParam int ownerId,@RequestParam String title){
         return historyService.getEventByTitle(ownerId, title);
     }
     
     @GetMapping(value = SEARCH+BY_DATES)
-    public List<EventHistoryDto> getEventsByDateRange(@RequestParam String ownerId,
+    public List<EventHistoryDto> getEventsByDateRange(@RequestParam int ownerId,
                                                       @RequestParam LocalDate from,
                                                       @RequestParam LocalDate to){
         return historyService.getEventsByDate(ownerId, from, to);
     }
     
     @GetMapping(value = SEARCH+BY_NETWORKS)
-    public List<EventHistoryDto> getEventsByNetworks(@RequestParam String ownerId, @RequestParam List<String>networks){
+    public List<EventHistoryDto> getEventsByNetworks(@RequestParam int ownerId, @RequestParam List<String>networks){
         return historyService.getEventsBySentNetworks(ownerId, networks);
     }
 }

@@ -9,4 +9,7 @@ public interface ApiConstants {
     String BY_TITLE="/title";
     String BY_NETWORKS="/networks";
     String BY_DATES="/dates";
+    String HEADER ="Authorization";
+    String VALIDATE="/validate";
+
 }
