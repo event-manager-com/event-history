@@ -42,8 +42,8 @@ public class HistoryEventController {
         return historyService.getEventsByDate(ownerId, from, to);
     }
     
-    @GetMapping(value = SEARCH+BY_NETWORKS)
-    public List<EventHistoryDto> getEventsByNetworks(@RequestParam int ownerId, @RequestParam List<String>networks){
-        return historyService.getEventsBySentNetworks(ownerId, networks);
+    @GetMapping(value = SEARCH+BY_GUEST)
+    public List<EventHistoryDto> getEventsByNetworks(@RequestParam int ownerId, @RequestParam int guestId){
+        return historyService.getEventsByInvitedUser(ownerId, guestId);
     }
 }

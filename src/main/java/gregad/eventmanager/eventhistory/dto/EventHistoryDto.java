@@ -31,7 +31,6 @@ public class EventHistoryDto {
     private LocalTime eventTime;
     private String imageUrl;
     private String telegramChannelRef;
-    private Map<String,List<User>>sentToNetworkConnections;
-    private Map<String, List<User>> invited;
-    private Map<String, List<Message>> correspondences;
+    private List<User> invited;
+    private List<Message> correspondences;
 }

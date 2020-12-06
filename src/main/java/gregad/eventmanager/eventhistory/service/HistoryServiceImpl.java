@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +51,6 @@ public class HistoryServiceImpl implements HistoryService {
         eventHistoryDto.setDescription(eventEntity.getDescription());
         eventHistoryDto.setEventDate(eventEntity.getEventDate());
         eventHistoryDto.setEventTime(eventEntity.getEventTime());
-        eventHistoryDto.setSentToNetworkConnections(eventEntity.getSentToNetworkConnections());
         eventHistoryDto.setInvited(eventEntity.getInvited());
         eventHistoryDto.setCorrespondences(eventEntity.getCorrespondences());
         return eventHistoryDto;
@@ -73,13 +73,13 @@ public class HistoryServiceImpl implements HistoryService {
                 .collect(Collectors.toList());
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @Override
-    public List<EventHistoryDto> getEventsBySentNetworks(int ownerId, List<String> networks) {
-        return eventRepo.findAllByOwnerId(ownerId).orElse(new ArrayList<>()).stream()
-                .filter(e-> e.getSentToNetworkConnections().keySet().stream().anyMatch(networks::contains))
-                .collect(Collectors.toSet())
-                .stream()
-                .map(this::toEventResponseDto)
-                .collect(Collectors.toList());
-    }
+@Override
+public List<EventHistoryDto> getEventsByInvitedUser(int ownerId, int userInvitedId) {
+    List<EventEntity> eventsFromRepo = eventRepo.findAllByOwnerId(ownerId)
+            .orElse(new ArrayList<>())
+            .stream()
+            .filter(e -> e.getInvited().stream().anyMatch(u -> u.getId() == userInvitedId))
+            .collect(Collectors.toList());
+    return eventsFromRepo.stream().map(this::toEventResponseDto).collect(Collectors.toList());
+}
 }

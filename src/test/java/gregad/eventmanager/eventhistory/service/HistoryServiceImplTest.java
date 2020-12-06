@@ -48,13 +48,8 @@ class HistoryServiceImplTest {
             eventEntity.setDescription("Some Description");
             eventEntity.setEventDate(LocalDate.of(2020,isRepeated?10:12,12));
             eventEntity.setEventTime(LocalTime.of(12,01));
-            if (isRepeated) {
-                eventEntity.setSentToNetworkConnections(Map.of("facebook", users, "twitter", users));
-            } else {
-                eventEntity.setSentToNetworkConnections(Map.of("facebook", users));
-            }
-            eventEntity.setInvited(Map.of("facebook",users,"twitter",users));
-            eventEntity.setCorrespondences(new HashMap<>());
+            eventEntity.setInvited(users);
+            eventEntity.setCorrespondences(new ArrayList<>());
             res.add(eventEntity);
         }
         return res;
@@ -136,15 +131,12 @@ class HistoryServiceImplTest {
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Test
-    void getEventsBySentNetworks() {
+    void getEventsByInvitedUser() {
         when(eventRepo.findAllByOwnerId(0)).thenReturn(Optional.of(List.of(eventEntityList.get(0),eventEntityList.get(20))));
 
-        List<EventHistoryDto> result = historyService.getEventsBySentNetworks(0, List.of("twitter"));
+        List<EventHistoryDto> result = historyService.getEventsByInvitedUser(0, 2);
         
-        Assert.assertEquals(1,result.size());
-        Assert.assertTrue(result.get(0).getSentToNetworkConnections().containsKey("twitter"));
+        Assert.assertEquals(2,result.size());
 
-        List<EventHistoryDto> anotherResult = historyService.getEventsBySentNetworks(0, List.of("facebook"));
-        Assert.assertEquals(2,anotherResult.size());
     }
 }
