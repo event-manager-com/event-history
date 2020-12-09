@@ -4,6 +4,7 @@ import gregad.eventmanager.eventhistory.dto.EventHistoryDto;
 import gregad.eventmanager.eventhistory.model.EventEntity;
 import gregad.eventmanager.eventhistory.service.HistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -37,8 +38,8 @@ public class HistoryEventController {
     
     @GetMapping(value = SEARCH+BY_DATES)
     public List<EventHistoryDto> getEventsByDateRange(@RequestParam int ownerId,
-                                                      @RequestParam LocalDate from,
-                                                      @RequestParam LocalDate to){
+                                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+                                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to){
         return historyService.getEventsByDate(ownerId, from, to);
     }
     

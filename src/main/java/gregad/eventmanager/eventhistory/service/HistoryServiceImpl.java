@@ -1,5 +1,6 @@
 package gregad.eventmanager.eventhistory.service;
 
+import gregad.event_manager.loggerstarter.aspect.DoLogging;
 import gregad.eventmanager.eventhistory.dao.EventDao;
 import gregad.eventmanager.eventhistory.dto.EventHistoryDto;
 import gregad.eventmanager.eventhistory.model.EventEntity;
@@ -10,7 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
  * @author Greg Adler
  */
 @Service
+@DoLogging
 public class HistoryServiceImpl implements HistoryService {
     private EventDao eventRepo;
 
@@ -37,13 +38,11 @@ public class HistoryServiceImpl implements HistoryService {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public EventHistoryDto getEventById(long id,int ownerId) {
-        EventEntity eventEntity = eventRepo.findByIdAndOwnerId(id,ownerId).orElseThrow(()->{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Event id:"+id+" not found in user id:"+ownerId+" storage");
-        });
+        EventEntity eventEntity = eventRepo.findByIdAndOwnerId(id,ownerId).orElse(null);
         return toEventResponseDto(eventEntity);
     }
     private EventHistoryDto toEventResponseDto(EventEntity eventEntity) {
+        if (eventEntity==null)return null;
         EventHistoryDto eventHistoryDto = new EventHistoryDto();
         eventHistoryDto.setId(eventEntity.getId());
         eventHistoryDto.setOwner(eventEntity.getOwner());
