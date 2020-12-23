@@ -134,7 +134,7 @@ class HistoryServiceImplTest {
     void getEventsByInvitedUser() {
         when(eventRepo.findAllByOwnerId(0)).thenReturn(Optional.of(List.of(eventEntityList.get(0),eventEntityList.get(20))));
 
-        List<EventHistoryDto> result = historyService.getEventsByInvitedUser(0, 2);
+        List<EventHistoryDto> result = historyService.getEventsByGuestName(0, "name"+2);
         
         Assert.assertEquals(2,result.size());
 

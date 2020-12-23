@@ -51,6 +51,7 @@ public class HistoryServiceImpl implements HistoryService {
         eventHistoryDto.setEventDate(eventEntity.getEventDate());
         eventHistoryDto.setEventTime(eventEntity.getEventTime());
         eventHistoryDto.setInvited(eventEntity.getInvited());
+        eventHistoryDto.setApprovedGuests(eventEntity.getApprovedGuests());
         eventHistoryDto.setCorrespondences(eventEntity.getCorrespondences());
         return eventHistoryDto;
     }
@@ -73,11 +74,11 @@ public class HistoryServiceImpl implements HistoryService {
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Override
-public List<EventHistoryDto> getEventsByInvitedUser(int ownerId, int userInvitedId) {
+public List<EventHistoryDto> getEventsByGuestName(int ownerId, String userInvited) {
     List<EventEntity> eventsFromRepo = eventRepo.findAllByOwnerId(ownerId)
             .orElse(new ArrayList<>())
             .stream()
-            .filter(e -> e.getInvited().stream().anyMatch(u -> u.getId() == userInvitedId))
+            .filter(e -> e.getApprovedGuests().stream().anyMatch(u -> u.getName().equals(userInvited)))
             .collect(Collectors.toList());
     return eventsFromRepo.stream().map(this::toEventResponseDto).collect(Collectors.toList());
 }
